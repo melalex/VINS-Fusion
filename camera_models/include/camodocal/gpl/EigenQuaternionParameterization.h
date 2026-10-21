@@ -1,6 +1,22 @@
 #ifndef EIGENQUATERNIONPARAMETERIZATION_H
 #define EIGENQUATERNIONPARAMETERIZATION_H
 
+#include "ceres/version.h"
+
+#if CERES_VERSION_MAJOR > 2 || (CERES_VERSION_MAJOR == 2 && CERES_VERSION_MINOR >= 1)
+#include "ceres/manifold.h"
+
+namespace camodocal
+{
+
+// Ceres 2.2 removed ceres::LocalParameterization. Ceres' own (final)
+// EigenQuaternionManifold perturbs the same way the Plus below does
+// (x_plus_delta = [sin(|d|)/|d| * d, cos(|d|)] * x, Eigen's x,y,z,w order).
+using EigenQuaternionParameterization = ceres::EigenQuaternionManifold;
+
+}
+
+#else
 #include "ceres/local_parameterization.h"
 
 namespace camodocal
@@ -35,6 +51,8 @@ EigenQuaternionParameterization::EigenQuaternionProduct(const T z[4], const T w[
 }
 
 }
+
+#endif // CERES_VERSION
 
 #endif
 

@@ -2,6 +2,8 @@
 
 #include <cmath>
 
+#if !(CERES_VERSION_MAJOR > 2 || (CERES_VERSION_MAJOR == 2 && CERES_VERSION_MINOR >= 1))
+
 namespace camodocal
 {
 
@@ -44,3 +46,5 @@ EigenQuaternionParameterization::ComputeJacobian(const double* x,
 }
 
 }
+
+#endif // CERES_VERSION

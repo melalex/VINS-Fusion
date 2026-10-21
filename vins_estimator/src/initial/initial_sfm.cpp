@@ -9,6 +9,7 @@
  * Author: Qin Tong (qintonguav@gmail.com)
  *******************************************************/
 
+#include <ceres/version.h>
 #include "initial_sfm.h"
 
 GlobalSFM::GlobalSFM(){}
@@ -242,7 +243,11 @@ bool GlobalSFM::construct(int frame_num, Quaterniond* q, Vector3d* T, int l,
 */
 	//full BA
 	ceres::Problem problem;
+#if CERES_VERSION_MAJOR > 2 || (CERES_VERSION_MAJOR == 2 && CERES_VERSION_MINOR >= 1)
+	ceres::Manifold* local_parameterization = new ceres::QuaternionManifold();
+#else
 	ceres::LocalParameterization* local_parameterization = new ceres::QuaternionParameterization();
+#endif
 	//cout << " begin full BA " << endl;
 	for (int i = 0; i < frame_num; i++)
 	{
