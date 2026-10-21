@@ -47,6 +47,7 @@ int SHOW_TRACK;
 int FLOW_BACK;
 
 
+#ifdef VINS_USE_ROS
 template <typename T>
 T readParam(ros::NodeHandle &n, std::string name)
 {
@@ -62,6 +63,7 @@ T readParam(ros::NodeHandle &n, std::string name)
     }
     return ans;
 }
+#endif
 
 void readParameters(std::string config_file)
 {

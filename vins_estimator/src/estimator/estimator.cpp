@@ -8,7 +8,9 @@
  *******************************************************/
 
 #include "estimator.h"
+#ifdef VINS_USE_ROS
 #include "../utility/visualization.h"
+#endif
 
 Estimator::Estimator(): f_manager{Rs}
 {
@@ -171,8 +173,10 @@ void Estimator::inputImage(double t, const cv::Mat &_img, const cv::Mat &_img1)
 
     if (SHOW_TRACK)
     {
+#ifdef VINS_USE_ROS
         cv::Mat imgTrack = featureTracker.getTrackImage();
         pubTrackImage(imgTrack, t);
+#endif
     }
     
     if(MULTIPLE_THREAD)  
@@ -191,7 +195,11 @@ void Estimator::inputImage(double t, const cv::Mat &_img, const cv::Mat &_img1)
         mBuf.unlock();
         TicToc processTime;
         processMeasurements();
+#ifdef VINS_USE_ROS
         printf("process time: %f\n", processTime.toc());
+#else
+        ROS_INFO("process time: %f", processTime.toc());
+#endif
     }
     
 }
@@ -208,7 +216,9 @@ void Estimator::inputIMU(double t, const Vector3d &linearAcceleration, const Vec
     {
         mPropagate.lock();
         fastPredictIMU(t, linearAcceleration, angularVelocity);
+#ifdef VINS_USE_ROS
         pubLatestOdometry(latest_P, latest_Q, latest_V, t);
+#endif
         mPropagate.unlock();
     }
 }
@@ -318,6 +328,7 @@ void Estimator::processMeasurements()
             processImage(feature.second, feature.first);
             prevTime = curTime;
 
+#ifdef VINS_USE_ROS
             printStatistics(*this, 0);
 
             std_msgs::Header header;
@@ -330,6 +341,7 @@ void Estimator::processMeasurements()
             pubPointCloud(*this, header);
             pubKeyframe(*this);
             pubTF(*this, header);
+#endif
             mProcess.unlock();
         }
 

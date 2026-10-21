@@ -11,8 +11,10 @@
  
 #include <thread>
 #include <mutex>
+#ifdef VINS_USE_ROS
 #include <std_msgs/Header.h>
 #include <std_msgs/Float32.h>
+#endif
 #include <ceres/ceres.h>
 #include <unordered_map>
 #include <queue>

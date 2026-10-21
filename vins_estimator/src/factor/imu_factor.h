@@ -8,7 +8,7 @@
  *******************************************************/
 
 #pragma once
-#include <ros/assert.h>
+#include "../utility/log.h"
 #include <iostream>
 #include <eigen3/Eigen/Dense>
 

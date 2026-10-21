@@ -33,6 +33,10 @@ include_directories(
 
 catkin_package()
 
+# The estimator's ROS-only parts (publishers, ROS logging) are guarded by
+# VINS_USE_ROS; the plain-CMake build at the repository root leaves it unset.
+add_definitions(-DVINS_USE_ROS)
+
 add_library(vins_lib
     src/estimator/parameters.cpp
     src/estimator/estimator.cpp
